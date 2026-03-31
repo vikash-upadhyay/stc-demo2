@@ -867,7 +867,15 @@
   var currentPlan = '', currentPrice = 0;
 
   /* ── open checkout ── */
-  function openCheckout(plan, price) {
+function openCheckout(plan, price) {
+  var spot = document.getElementById('checkout-upsell-spot');
+
+  // Only show SAS spot for mofawtar 2
+  if (plan === 'mofawtar 2') {
+    spot.id = 'checkout-upsell-spot';   // keep the ID CI 360 targets
+  } else {
+    spot.id = 'checkout-spot-inactive'; // rename it so CI 360 cannot find it
+  }
     currentPlan  = plan;
     currentPrice = price;
     document.getElementById('co-plan').textContent  = plan;
