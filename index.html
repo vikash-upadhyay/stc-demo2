@@ -47,24 +47,9 @@
     }
 
     /* ── HEADER ── */
-    header {
-      background: #fff;
-      border-bottom: 1px solid var(--line);
-      height: 64px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 40px;
-      position: sticky;
-      top: 0;
-      z-index: 50;
-    }
+    header { background: #fff; border-bottom: 1px solid var(--line); height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 0 40px; position: sticky; top: 0; z-index: 50; }
     .stc-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-    .stc-logo-box {
-      width: 42px; height: 42px; background: var(--purple); border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: -.02em;
-    }
+    .stc-logo-box { width: 42px; height: 42px; background: var(--purple); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 800; letter-spacing: -.02em; }
     .stc-wordmark { font-family: 'Outfit', sans-serif; font-size: 21px; font-weight: 800; color: var(--purple); letter-spacing: -.03em; }
     nav { display: flex; gap: 30px; font-size: 14px; font-weight: 500; color: var(--text-2); }
     nav a { text-decoration: none; color: inherit; transition: color .15s; }
@@ -116,36 +101,11 @@
     .btn-green:hover { background: #009048; transform: translateY(-1px); }
 
     /* ── OVERLAY BASE ── */
-    .overlay {
-      visibility: hidden;
-      opacity: 0;
-      pointer-events: none;
-      position: fixed; inset: 0;
-      background: rgba(10,10,24,.5);
-      backdrop-filter: blur(5px);
-      z-index: 200;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-    }
-    .overlay.open { 
-      visibility: visible;
-      opacity: 1;
-      pointer-events: auto;
-    }
+    .overlay { visibility: hidden; opacity: 0; pointer-events: none; position: fixed; inset: 0; background: rgba(10,10,24,.5); backdrop-filter: blur(5px); z-index: 200; display: flex; align-items: center; justify-content: center; padding: 20px; transition: opacity 0.3s ease, visibility 0.3s ease; }
+    .overlay.open { visibility: visible; opacity: 1; pointer-events: auto; }
 
     /* ── CHECKOUT PANEL ── */
-    .checkout-panel {
-      background: #fff;
-      border-radius: 20px;
-      width: min(500px, 100%);
-      box-shadow: 0 32px 80px rgba(0,0,0,.18);
-      overflow: hidden;
-      transform: translateY(20px);
-      transition: transform 0.3s cubic-bezier(.22,1,.36,1);
-    }
+    .checkout-panel { background: #fff; border-radius: 20px; width: min(500px, 100%); box-shadow: 0 32px 80px rgba(0,0,0,.18); overflow: hidden; transform: translateY(20px); transition: transform 0.3s cubic-bezier(.22,1,.36,1); }
     .overlay.open .checkout-panel { transform: translateY(0); }
 
     .checkout-header { background: var(--bg-2); border-bottom: 1px solid var(--line); padding: 18px 26px; display: flex; align-items: center; justify-content: space-between; }
@@ -154,26 +114,27 @@
     .close-btn:hover { border-color: var(--text-2); color: var(--text); }
     .checkout-body { padding: 22px 26px 26px; }
 
-    /* ── SAS CI 360 SPOT (RACE-CONDITION FIX) ── */
-    /* We NEVER use display: none here. 
-       We strictly use max-height to physically collapse the space 
-       so SAS never detaches from the node. */
+    /* ═══════════════════════════════════════════════════
+      SAS CI 360 SPOT (THE ULTIMATE FIX) 
+      We never apply display:none or heights to the spot itself. 
+      SAS will always see it as a perfectly valid target.
+      Instead, we hide the INJECTED children based on a parent class.
+      ═══════════════════════════════════════════════════
+    */
     #checkout-upsell-spot {
       display: block;
-      overflow: hidden;
-      transition: max-height .4s cubic-bezier(.22,1,.36,1), opacity .3s ease, margin .4s ease;
+      width: 100%;
+      transition: margin .3s ease;
     }
-    .spot-hidden {
-      max-height: 0 !important;
-      opacity: 0 !important;
-      margin-bottom: 0 !important;
-      pointer-events: none !important;
+
+    /* Hide any banner SAS injects if the user isn't buying mofawtar 2 */
+    .checkout-body:not(.show-upsell) #checkout-upsell-spot > * {
+      display: none !important;
     }
-    .spot-visible {
-      max-height: 200px !important;
-      opacity: 1 !important;
-      margin-bottom: 18px !important;
-      pointer-events: auto !important;
+
+    /* Add the spacing back when we actually want to show the banner */
+    .checkout-body.show-upsell #checkout-upsell-spot {
+      margin-bottom: 18px;
     }
 
     /* ── INJECTED BANNER STYLES ── */
@@ -329,7 +290,7 @@
 
     <div class="checkout-body">
 
-      <div id="checkout-upsell-spot" class="spot-hidden"></div>
+      <div id="checkout-upsell-spot"></div>
 
       <div class="order-box">
         <div class="order-box-label">Order Summary</div>
@@ -390,7 +351,7 @@
   var currentPlan  = '';
   var currentPrice = 0;
 
-  function openCheckout(plan, price, showSpot) {
+  function openCheckout(plan, price, isMofawtar2) {
     currentPlan  = plan;
     currentPrice = price;
 
@@ -403,13 +364,12 @@
     });
     document.querySelector('.pay-opt').classList.add('active');
 
-    var spot = document.getElementById('checkout-upsell-spot');
-    if (showSpot) {
-      spot.classList.remove('spot-hidden');
-      spot.classList.add('spot-visible');
+    // Update the class on the PARENT body container, never touch the spot itself
+    var bodyContainer = document.querySelector('.checkout-body');
+    if (isMofawtar2) {
+      bodyContainer.classList.add('show-upsell');
     } else {
-      spot.classList.remove('spot-visible');
-      spot.classList.add('spot-hidden');
+      bodyContainer.classList.remove('show-upsell');
     }
 
     document.getElementById('overlay-checkout').classList.add('open');
@@ -417,16 +377,8 @@
 
   function closeCheckout() {
     document.getElementById('overlay-checkout').classList.remove('open');
-    // Using a slight delay before hiding the spot so the modal fade-out looks smooth
-    setTimeout(resetSpot, 300);
-  }
-
-  function resetSpot() {
-    var spot = document.getElementById('checkout-upsell-spot');
-    spot.classList.remove('spot-visible');
-    spot.classList.add('spot-hidden');
-    // CRITICAL: We do NOT clear innerHTML.
-    // If SAS injects it, we just safely tuck it away by collapsing the height.
+    // Notice we removed the resetSpot() function entirely. 
+    // We let openCheckout() naturally handle the state next time it's clicked.
   }
 
   function selectPay(el) {
@@ -440,12 +392,10 @@
     document.getElementById('success-plan-name').textContent = currentPlan;
     document.getElementById('overlay-checkout').classList.remove('open');
     document.getElementById('overlay-success').classList.add('open');
-    resetSpot();
   }
 
   function resetDemo() {
     document.getElementById('overlay-success').classList.remove('open');
-    resetSpot();
   }
 </script>
 
