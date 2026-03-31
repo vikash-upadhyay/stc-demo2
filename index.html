@@ -334,9 +334,8 @@
     }
     .btn-green:hover { background: #009048; transform: translateY(-1px); }
 
-    /* ── OVERLAY BASE (FIXED) ── */
+    /* ── OVERLAY BASE ── */
     .overlay {
-      /* Replaced display: none with visibility and opacity controls */
       visibility: hidden;
       opacity: 0;
       pointer-events: none;
@@ -363,7 +362,6 @@
       width: min(500px, 100%);
       box-shadow: 0 32px 80px rgba(0,0,0,.18);
       overflow: hidden;
-      /* Add transition for smoother open */
       transform: translateY(20px);
       transition: transform 0.3s cubic-bezier(.22,1,.36,1);
     }
@@ -399,22 +397,16 @@
 
     .checkout-body { padding: 22px 26px 26px; }
 
-    /* ── SAS CI 360 SPOT ── */
-    #checkout-upsell-spot {
-      overflow: hidden;
-      transition: max-height .4s cubic-bezier(.22,1,.36,1),
-                  opacity    .3s ease,
-                  margin     .4s ease;
-    }
+    /* ── SAS CI 360 SPOT (FIXED) ── */
+    /* We removed max-height:0. Using max-height:0 while the modal is visible 
+       makes SAS tag manager flag the spot as "invalid/blocked by CSS".
+       Instead, we just remove it entirely from flow using display: none.
+    */
     .spot-hidden {
-      max-height: 0;
-      opacity: 0;
-      margin-bottom: 0;
-      pointer-events: none;
+      display: none;
     }
     .spot-visible {
-      max-height: 200px;
-      opacity: 1;
+      display: block;
       margin-bottom: 18px;
     }
 
@@ -427,6 +419,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      /* The animation happens natively when display: block triggers */
       animation: bannerSlide .4s cubic-bezier(.22,1,.36,1);
     }
     @keyframes bannerSlide {
@@ -584,25 +577,13 @@
     }
 
     /* ── FOOTER ── */
-    footer {
-      background: var(--bg-2);
-      border-top: 1px solid var(--line);
-      padding: 24px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-3);
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .footer-brand {
-      font-family: 'Outfit', sans-serif;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--purple);
-      margin-bottom: 3px;
-    }
+    <footer>
+      <div>
+        <div class="footer-brand">stc</div>
+        <div>© 2025 Saudi Telecom Company. All rights reserved.</div>
+      </div>
+      <div>Privacy Policy &nbsp;·&nbsp; Terms of Use &nbsp;·&nbsp; Contact Us</div>
+    </footer>
   </style>
 </head>
 <body>
@@ -625,20 +606,17 @@
   </div>
 </header>
 
-
 <section class="hero">
   <div class="hero-pill">Postpaid Plans 2025</div>
   <h1>Stay Connected,<br>Stay Ahead with 5G</h1>
   <p>Choose a plan designed for how you live — stream, call, and connect without limits.</p>
 </section>
 
-
 <section class="plans-section">
   <div class="section-eyebrow">Postpaid</div>
   <h2 class="section-heading">Pick your perfect plan</h2>
 
   <div class="plans-grid">
-
     <div class="plan-card">
       <div class="plan-tier">Starter</div>
       <div class="plan-name">mofawtar 1</div>
@@ -712,7 +690,6 @@
   </div>
 </section>
 
-
 <div class="overlay" id="overlay-checkout">
   <div class="checkout-panel">
 
@@ -766,7 +743,6 @@
   </div>
 </div>
 
-
 <div class="overlay" id="overlay-success">
   <div class="success-panel">
     <div class="success-ring">✓</div>
@@ -780,16 +756,6 @@
     </button>
   </div>
 </div>
-
-
-<footer>
-  <div>
-    <div class="footer-brand">stc</div>
-    <div>© 2025 Saudi Telecom Company. All rights reserved.</div>
-  </div>
-  <div>Privacy Policy &nbsp;·&nbsp; Terms of Use &nbsp;·&nbsp; Contact Us</div>
-</footer>
-
 
 <script>
   var currentPlan  = '';
@@ -822,17 +788,14 @@
 
   function closeCheckout() {
     document.getElementById('overlay-checkout').classList.remove('open');
-    resetSpot();
+    // Using a slight delay before hiding the spot so the modal fade-out looks smooth
+    setTimeout(resetSpot, 300);
   }
 
   function resetSpot() {
     var spot = document.getElementById('checkout-upsell-spot');
     spot.classList.remove('spot-visible');
     spot.classList.add('spot-hidden');
-    
-    // CRITICAL FIX: Do not clear the innerHTML!
-    // If you clear it, SAS CI360 won't automatically re-inject it on subsequent clicks without a refresh.
-    // spot.innerHTML = '';
   }
 
   function selectPay(el) {
