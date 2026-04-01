@@ -8,6 +8,12 @@
   <!-- ═══════════════════════════════════════════════════
        SAS CI 360 TAG  |  Corevision Training Tenant
        tenantId: 2a7ea85c0b000164f7542674
+
+       CRITICAL: The SAS tag scans for registered spots
+       when this script initialises. Spots inside a
+       display:none element are NOT in the rendered DOM
+       and will be missed. This page uses visibility/opacity
+       to hide overlays so every spot is always in the DOM.
   ════════════════════════════════════════════════════ -->
   <link rel="preload" href="https://ingest-training.ci360.sas.com/js/ot2.min.js" as="script" />
   <script>
@@ -21,17 +27,17 @@
   <script async data-efname="ci360"
     src="https://ingest-training.ci360.sas.com/js/ot2.min.js"
     id="ob-script-async"></script>
-  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- ════════════════════════════════════════════════ -->
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 
   <style>
+    /* ── TOKENS ── */
     :root {
       --purple:      #4f008c;
       --purple-mid:  #7011c4;
       --purple-soft: #f0e8ff;
-      --coral:       #ff375e;
       --green:       #00a651;
       --green-soft:  #e8f7ee;
       --text:        #111118;
@@ -43,7 +49,6 @@
     }
 
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background: var(--bg);
@@ -71,45 +76,32 @@
       gap: 10px;
       text-decoration: none;
     }
-    .stc-logo-box {
-      width: 42px; height: 42px;
+    .logo-box {
+      width: 40px; height: 40px;
       background: var(--purple);
-      border-radius: 10px;
+      border-radius: 9px;
       display: flex; align-items: center; justify-content: center;
-      color: white;
+      color: #fff;
       font-family: 'Outfit', sans-serif;
-      font-size: 15px;
-      font-weight: 800;
+      font-size: 14px; font-weight: 800;
       letter-spacing: -.02em;
     }
-    .stc-wordmark {
+    .logo-word {
       font-family: 'Outfit', sans-serif;
-      font-size: 21px;
-      font-weight: 800;
+      font-size: 21px; font-weight: 800;
       color: var(--purple);
       letter-spacing: -.03em;
     }
     nav {
       display: flex;
       gap: 30px;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 500;
       color: var(--text-2);
     }
     nav a { text-decoration: none; color: inherit; transition: color .15s; }
     nav a:hover { color: var(--purple); }
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-    .lang-toggle {
-      font-size: 13px;
-      color: var(--text-3);
-      cursor: pointer;
-      font-weight: 500;
-    }
-    .my-stc-btn {
+    .my-stc {
       background: var(--purple);
       color: #fff;
       font-size: 13px;
@@ -121,14 +113,14 @@
       cursor: pointer;
       transition: background .2s;
     }
-    .my-stc-btn:hover { background: var(--purple-mid); }
+    .my-stc:hover { background: var(--purple-mid); }
 
     /* ── HERO ── */
     .hero {
       background: linear-gradient(140deg, var(--purple) 0%, #1e0048 100%);
-      color: white;
+      color: #fff;
       text-align: center;
-      padding: 60px 20px 56px;
+      padding: 64px 20px 60px;
     }
     .hero-pill {
       display: inline-block;
@@ -136,7 +128,7 @@
       border: 1px solid rgba(255,255,255,.22);
       border-radius: 20px;
       padding: 4px 16px;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: 700;
       letter-spacing: .1em;
       text-transform: uppercase;
@@ -150,37 +142,20 @@
       line-height: 1.12;
       margin-bottom: 14px;
     }
-    .hero p {
-      font-size: 15.5px;
-      opacity: .75;
-      max-width: 440px;
-      margin: 0 auto;
-      line-height: 1.6;
-    }
+    .hero p { font-size: 15px; opacity: .72; max-width: 420px; margin: 0 auto; line-height: 1.65; }
 
-    /* ── PLANS SECTION ── */
-    .plans-section {
-      max-width: 1040px;
-      margin: 0 auto;
-      padding: 60px 20px 80px;
+    /* ── PLANS ── */
+    .plans-section { max-width: 1040px; margin: 0 auto; padding: 60px 20px 80px; }
+    .eyebrow {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--purple); margin-bottom: 8px;
     }
-    .section-eyebrow {
-      font-size: 11.5px;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--purple);
-      margin-bottom: 8px;
-    }
-    .section-heading {
+    .section-title {
       font-family: 'Outfit', sans-serif;
-      font-size: 28px;
-      font-weight: 700;
-      letter-spacing: -.01em;
-      margin-bottom: 36px;
+      font-size: 27px; font-weight: 700;
+      letter-spacing: -.01em; margin-bottom: 36px;
     }
-
-    /* ── PLAN CARDS ── */
     .plans-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -188,442 +163,267 @@
     }
     @media (max-width: 740px) {
       .plans-grid { grid-template-columns: 1fr; }
-      nav, .lang-toggle { display: none; }
-      header { padding: 0 20px; }
+      nav { display: none; }
+      header { padding: 0 18px; }
     }
 
-    .plan-card {
+    .card {
       background: #fff;
       border: 1.5px solid var(--line);
       border-radius: 18px;
-      padding: 28px 24px 24px;
+      padding: 28px 22px 24px;
       position: relative;
       transition: box-shadow .25s, border-color .25s, transform .25s;
     }
-    .plan-card:hover {
-      box-shadow: 0 12px 48px rgba(0,0,0,.1);
-      transform: translateY(-3px);
-    }
-    .plan-card.featured {
+    .card:hover { box-shadow: 0 12px 48px rgba(0,0,0,.09); transform: translateY(-3px); }
+    .card.featured {
       border-color: var(--purple);
-      box-shadow: 0 0 0 1px var(--purple), 0 4px 24px rgba(79,0,140,.12);
+      box-shadow: 0 0 0 1px var(--purple), 0 4px 24px rgba(79,0,140,.1);
     }
-    .featured-badge {
+    .feat-badge {
       position: absolute;
       top: -1px; left: 50%;
       transform: translateX(-50%);
-      background: var(--purple);
-      color: white;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
+      background: var(--purple); color: #fff;
+      font-size: 9.5px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
       padding: 4px 14px;
       border-radius: 0 0 10px 10px;
       white-space: nowrap;
     }
-    .plan-tier {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .09em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 5px;
-    }
-    .plan-name {
-      font-family: 'Outfit', sans-serif;
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-    .plan-card.featured .plan-name { color: var(--purple); }
-    .plan-desc {
-      font-size: 12.5px;
-      color: var(--text-3);
-      margin-bottom: 22px;
-    }
-    .plan-price-row {
-      display: flex;
-      align-items: baseline;
-      gap: 3px;
-      margin-bottom: 22px;
-    }
-    .plan-price {
-      font-family: 'Outfit', sans-serif;
-      font-size: 40px;
-      font-weight: 800;
-      color: var(--text);
-      letter-spacing: -.03em;
-    }
-    .plan-currency {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-2);
-      margin-bottom: 5px;
-      align-self: flex-end;
-    }
-    .plan-per {
-      font-size: 12px;
-      color: var(--text-3);
-      margin-bottom: 5px;
-      align-self: flex-end;
-    }
-    .plan-divider {
-      border: none;
-      border-top: 1px solid var(--line);
-      margin: 0 0 20px;
-    }
-    .plan-features {
-      list-style: none;
-      margin-bottom: 26px;
-    }
-    .plan-features li {
-      font-size: 13px;
-      color: var(--text-2);
-      padding: 5px 0;
-      display: flex;
-      align-items: center;
-      gap: 9px;
-    }
+    .card-tier { font-size: 10.5px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--text-3); margin-bottom: 5px; }
+    .card-name { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 3px; }
+    .card.featured .card-name { color: var(--purple); }
+    .card-desc { font-size: 12px; color: var(--text-3); margin-bottom: 20px; }
+    .price-row { display: flex; align-items: baseline; gap: 3px; margin-bottom: 20px; }
+    .price { font-family: 'Outfit', sans-serif; font-size: 40px; font-weight: 800; letter-spacing: -.03em; }
+    .price-cur { font-size: 14px; font-weight: 600; color: var(--text-2); align-self: flex-end; margin-bottom: 5px; }
+    .price-per { font-size: 12px; color: var(--text-3); align-self: flex-end; margin-bottom: 5px; }
+    .divider { border: none; border-top: 1px solid var(--line); margin: 0 0 18px; }
+    .feats { list-style: none; margin-bottom: 24px; }
+    .feats li { font-size: 13px; color: var(--text-2); padding: 5px 0; display: flex; align-items: center; gap: 9px; }
     .tick {
       width: 17px; height: 17px;
       background: var(--green-soft);
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      color: var(--green);
-      font-size: 9px;
-      font-weight: 900;
+      color: var(--green); font-size: 9px; font-weight: 900;
       flex-shrink: 0;
     }
 
     /* ── BUTTONS ── */
     .btn {
-      display: block;
-      width: 100%;
-      padding: 13px 20px;
-      border-radius: 30px;
-      border: none;
-      font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
+      display: block; width: 100%;
+      padding: 13px 20px; border-radius: 30px; border: none;
+      font-size: 13.5px; font-weight: 600; cursor: pointer;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      transition: all .2s;
-      text-align: center;
+      transition: all .2s; text-align: center;
     }
-    .btn-outline {
-      background: transparent;
-      color: var(--purple);
-      border: 1.5px solid var(--purple);
-    }
+    .btn-primary { background: var(--purple); color: #fff; box-shadow: 0 4px 18px rgba(79,0,140,.22); }
+    .btn-primary:hover { background: var(--purple-mid); transform: translateY(-1px); box-shadow: 0 6px 22px rgba(79,0,140,.32); }
+    .btn-outline { background: transparent; color: var(--purple); border: 1.5px solid var(--purple); }
     .btn-outline:hover { background: var(--purple-soft); }
-    .btn-primary {
-      background: var(--purple);
-      color: white;
-      box-shadow: 0 4px 18px rgba(79,0,140,.25);
-    }
-    .btn-primary:hover {
-      background: var(--purple-mid);
-      box-shadow: 0 6px 22px rgba(79,0,140,.35);
-      transform: translateY(-1px);
-    }
-    .btn-ghost {
-      background: var(--bg-2);
-      color: var(--text-2);
-      border: 1.5px solid var(--line);
-    }
+    .btn-ghost { background: var(--bg-2); color: var(--text-2); border: 1.5px solid var(--line); }
     .btn-ghost:hover { border-color: #bbb; color: var(--text); }
-    .btn-green {
-      background: var(--green);
-      color: white;
-      box-shadow: 0 4px 16px rgba(0,166,81,.22);
-    }
+    .btn-green { background: var(--green); color: #fff; box-shadow: 0 4px 16px rgba(0,166,81,.2); }
     .btn-green:hover { background: #009048; transform: translateY(-1px); }
+    .btn-sm-purple {
+      display: inline-block;
+      background: var(--purple); color: #fff;
+      border: none; padding: 8px 16px; border-radius: 20px;
+      font-size: 12px; font-weight: 700; cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      white-space: nowrap; flex-shrink: 0;
+      transition: background .15s;
+    }
+    .btn-sm-purple:hover { background: var(--purple-mid); }
 
-    /* ── OVERLAY BASE ── */
+    /* ══════════════════════════════════════════════════════════
+       OVERLAY — KEY FIX
+       ──────────────────────────────────────────────────────────
+       ALWAYS display:flex so every child element (including
+       #checkout-upsell-spot) is in the rendered DOM when the
+       SAS tag initialises on page load.
+
+       visibility + opacity + pointer-events handle show/hide.
+       With display:none the spot is invisible to the SAS tag
+       at init time and never gets registered as a delivery
+       target — causing the banner to fail inconsistently.
+    ══════════════════════════════════════════════════════════ */
     .overlay {
-      display: none;
-      position: fixed; inset: 0;
-      background: rgba(10,10,24,.5);
-      backdrop-filter: blur(5px);
-      z-index: 200;
+      display: flex;                    /* ALWAYS flex — never none */
       align-items: center;
       justify-content: center;
+      position: fixed; inset: 0;
       padding: 20px;
+      z-index: 200;
+      background: rgba(10,10,24,.5);
+      backdrop-filter: blur(5px);
+
+      /* Hidden state */
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .25s ease, visibility .25s ease;
     }
-    .overlay.open { display: flex; }
+    .overlay.open {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: all;
+    }
 
     /* ── CHECKOUT PANEL ── */
-    .checkout-panel {
+    .co-panel {
       background: #fff;
       border-radius: 20px;
       width: min(500px, 100%);
       box-shadow: 0 32px 80px rgba(0,0,0,.18);
       overflow: hidden;
-      animation: panelUp .32s cubic-bezier(.22,1,.36,1);
+      transform: translateY(20px);
+      transition: transform .32s cubic-bezier(.22,1,.36,1);
     }
-    @keyframes panelUp {
-      from { opacity:0; transform: translateY(20px); }
-      to   { opacity:1; transform: translateY(0); }
-    }
-    .checkout-header {
+    .overlay.open .co-panel { transform: translateY(0); }
+
+    .co-head {
       background: var(--bg-2);
       border-bottom: 1px solid var(--line);
       padding: 18px 26px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
     }
-    .checkout-header h2 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 18px;
-      font-weight: 700;
-    }
-    .close-btn {
+    .co-head h2 { font-family: 'Outfit', sans-serif; font-size: 18px; font-weight: 700; }
+    .close-x {
       width: 32px; height: 32px;
-      border: 1.5px solid var(--line);
-      border-radius: 50%;
-      background: none;
-      font-size: 15px;
-      color: var(--text-3);
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
+      border: 1.5px solid var(--line); border-radius: 50%;
+      background: none; font-size: 15px; color: var(--text-3);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
       transition: all .15s;
     }
-    .close-btn:hover { border-color: var(--text-2); color: var(--text); }
+    .close-x:hover { border-color: var(--text-2); color: var(--text); }
 
-    .checkout-body { padding: 22px 26px 26px; }
+    .co-body { padding: 22px 26px 26px; }
 
-    /* ──────────────────────────────────────────────────────
+    /* ══════════════════════════════════════════════════════════
        SAS CI 360 — WEB SPOT CONTAINER
 
-       CI 360 injects the creative HTML into this div
-       when the journey fires the Web Task.
+       This div is always in the rendered DOM (because the
+       overlay never uses display:none). The SAS tag registers
+       it as a valid spot target when the page loads.
 
-       This div ALWAYS keeps the same ID.
-       Visibility is controlled by show/hide — never by
-       changing the ID (that was the bug).
+       CI 360 injects the creative HTML here when the
+       journey fires the Web Task after the checkout
+       button click event is received.
 
-       CI 360 Spot config:
+       Spot config in CI 360:
          Spot key  →  checkout-upsell-spot
          Selector  →  #checkout-upsell-spot
          Page      →  Any page
-    ─────────────────────────────────────────────────────── */
+
+       Visibility rule:
+         Empty (no injection) → :empty pseudo-class
+         collapses it to zero height, so no blank gap
+         appears for mofawtar 1 and mofawtar 4.
+    ══════════════════════════════════════════════════════════ */
     #checkout-upsell-spot {
       overflow: hidden;
-      transition: max-height .4s cubic-bezier(.22,1,.36,1),
-                  opacity   .3s ease,
-                  margin    .4s ease;
+      transition: margin-bottom .3s ease;
     }
-    /* Hidden state — spot is invisible but ID is preserved */
-    #checkout-upsell-spot.spot-hidden {
-      max-height: 0;
-      opacity: 0;
+    /* Spot is empty — collapse to nothing, no gap */
+    #checkout-upsell-spot:empty {
       margin-bottom: 0;
-      pointer-events: none;
     }
-    /* Visible state — spot can receive injected content */
-    #checkout-upsell-spot.spot-visible {
-      max-height: 200px;
-      opacity: 1;
+    /* Spot has injected content — give it breathing room */
+    #checkout-upsell-spot:not(:empty) {
       margin-bottom: 18px;
     }
 
-    /* ── INJECTED BANNER STYLES ──
-       These classes are used by the creative HTML that
-       CI 360 injects. Copy the .upsell-banner block
-       into your CI 360 HTML Creative editor.           */
+    /* ── INJECTED BANNER STYLES ──────────────────────────────
+       CI 360 injects this HTML block into #checkout-upsell-spot.
+       Copy the .upsell-banner markup into your CI 360
+       HTML Creative editor. The CSS classes are already
+       defined here so the injected HTML renders correctly.
+    ─────────────────────────────────────────────────────── */
     .upsell-banner {
       background: linear-gradient(135deg, var(--purple-soft), #fce8ff);
       border: 1.5px solid var(--purple);
       border-radius: 12px;
       padding: 14px 16px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      animation: bannerSlide .4s cubic-bezier(.22,1,.36,1);
+      display: flex; align-items: center; gap: 12px;
+      animation: bannerIn .4s cubic-bezier(.22,1,.36,1);
     }
-    @keyframes bannerSlide {
+    @keyframes bannerIn {
       from { opacity:0; transform: translateY(-8px); }
       to   { opacity:1; transform: translateY(0); }
     }
-    .upsell-banner .ub-icon {
-      width: 40px; height: 40px;
-      background: var(--purple);
-      border-radius: 10px;
+    .ub-icon {
+      width: 40px; height: 40px; flex-shrink: 0;
+      background: var(--purple); border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
       font-size: 19px;
-      flex-shrink: 0;
     }
-    .upsell-banner .ub-body { flex: 1; min-width: 0; }
-    .upsell-banner .ub-body strong {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--purple);
-      margin-bottom: 2px;
-    }
-    .upsell-banner .ub-body span {
-      font-size: 11.5px;
-      color: var(--text-2);
-      line-height: 1.4;
-    }
-    .upsell-banner .ub-cta {
-      background: var(--purple);
-      color: white;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 20px;
-      font-size: 11.5px;
-      font-weight: 700;
-      cursor: pointer;
-      white-space: nowrap;
-      flex-shrink: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      transition: background .15s;
-    }
-    .upsell-banner .ub-cta:hover { background: var(--purple-mid); }
+    .ub-body { flex: 1; min-width: 0; }
+    .ub-body strong { display: block; font-size: 13px; font-weight: 700; color: var(--purple); margin-bottom: 2px; }
+    .ub-body span { font-size: 11.5px; color: var(--text-2); line-height: 1.4; }
 
     /* ── ORDER SUMMARY ── */
     .order-box {
-      background: var(--bg-2);
-      border: 1px solid var(--line);
-      border-radius: 10px;
-      padding: 16px 18px;
-      margin-bottom: 18px;
+      background: var(--bg-2); border: 1px solid var(--line);
+      border-radius: 10px; padding: 16px 18px; margin-bottom: 18px;
     }
-    .order-box-label {
-      font-size: 10.5px;
-      font-weight: 700;
-      letter-spacing: .09em;
-      text-transform: uppercase;
-      color: var(--text-3);
-      margin-bottom: 12px;
-    }
-    .order-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 13px;
-      padding: 5px 0;
-      color: var(--text-2);
-      border-bottom: 1px solid var(--line);
-    }
+    .order-label { font-size: 10px; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--text-3); margin-bottom: 12px; }
+    .order-row { display: flex; justify-content: space-between; font-size: 13px; padding: 5px 0; color: var(--text-2); border-bottom: 1px solid var(--line); }
     .order-row:last-of-type { border-bottom: none; }
     .order-row span:last-child { color: var(--text); font-weight: 600; }
-    .order-total {
-      display: flex;
-      justify-content: space-between;
-      font-size: 16px;
-      font-weight: 700;
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1.5px solid var(--line);
-    }
+    .order-total { display: flex; justify-content: space-between; font-size: 16px; font-weight: 700; margin-top: 12px; padding-top: 12px; border-top: 1.5px solid var(--line); }
 
-    /* ── PAYMENT OPTIONS ── */
-    .pay-label {
-      font-size: 10.5px;
-      font-weight: 700;
-      color: var(--text-3);
-      text-transform: uppercase;
-      letter-spacing: .09em;
-      margin-bottom: 10px;
-    }
-    .pay-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 18px;
-    }
+    /* ── PAYMENT ── */
+    .pay-label { font-size: 10px; font-weight: 700; color: var(--text-3); text-transform: uppercase; letter-spacing: .09em; margin-bottom: 10px; }
+    .pay-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; margin-bottom: 18px; }
     .pay-opt {
-      border: 1.5px solid var(--line);
-      border-radius: 10px;
-      padding: 10px 8px;
-      text-align: center;
-      cursor: pointer;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-2);
-      transition: all .15s;
-      user-select: none;
+      border: 1.5px solid var(--line); border-radius: 10px;
+      padding: 10px 8px; text-align: center; cursor: pointer;
+      font-size: 12px; font-weight: 500; color: var(--text-2);
+      transition: all .15s; user-select: none;
     }
     .pay-opt .pi { font-size: 19px; display: block; margin-bottom: 4px; }
-    .pay-opt.active {
-      border-color: var(--purple);
-      background: var(--purple-soft);
-      color: var(--purple);
-      font-weight: 600;
-    }
+    .pay-opt.active { border-color: var(--purple); background: var(--purple-soft); color: var(--purple); font-weight: 600; }
     .pay-opt:not(.active):hover { border-color: #bbb; }
 
     /* ── SUCCESS PANEL ── */
     .success-panel {
-      background: #fff;
-      border-radius: 20px;
-      width: min(400px, 100%);
-      padding: 44px 32px;
+      background: #fff; border-radius: 20px;
+      width: min(400px, 100%); padding: 44px 32px;
       text-align: center;
       box-shadow: 0 32px 80px rgba(0,0,0,.18);
-      animation: panelUp .32s cubic-bezier(.22,1,.36,1);
+      transform: translateY(20px);
+      transition: transform .32s cubic-bezier(.22,1,.36,1);
     }
+    .overlay.open .success-panel { transform: translateY(0); }
     .success-ring {
-      width: 68px; height: 68px;
-      border-radius: 50%;
-      background: var(--green-soft);
-      border: 2px solid var(--green);
+      width: 66px; height: 66px; border-radius: 50%;
+      background: var(--green-soft); border: 2px solid var(--green);
       display: flex; align-items: center; justify-content: center;
-      font-size: 26px;
-      margin: 0 auto 20px;
-      animation: pop .4s cubic-bezier(.22,1,.36,1);
+      font-size: 26px; margin: 0 auto 20px;
     }
-    @keyframes pop {
-      from { transform: scale(.5); opacity:0; }
-      to   { transform: scale(1);  opacity:1; }
-    }
-    .success-panel h2 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .success-panel p {
-      font-size: 14px;
-      color: var(--text-2);
-      margin-bottom: 28px;
-      line-height: 1.65;
-    }
+    .success-panel h2 { font-family: 'Outfit', sans-serif; font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+    .success-panel p { font-size: 14px; color: var(--text-2); margin-bottom: 28px; line-height: 1.65; }
 
     /* ── FOOTER ── */
     footer {
-      background: var(--bg-2);
-      border-top: 1px solid var(--line);
+      background: var(--bg-2); border-top: 1px solid var(--line);
       padding: 24px 40px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 12px;
-      color: var(--text-3);
-      flex-wrap: wrap;
-      gap: 8px;
+      display: flex; align-items: center; justify-content: space-between;
+      font-size: 12px; color: var(--text-3); flex-wrap: wrap; gap: 8px;
     }
-    .footer-brand {
-      font-family: 'Outfit', sans-serif;
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--purple);
-      margin-bottom: 3px;
-    }
+    .footer-brand { font-family: 'Outfit', sans-serif; font-size: 15px; font-weight: 700; color: var(--purple); margin-bottom: 3px; }
   </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════
-     HEADER
-══════════════════════════════════════ -->
+<!-- ── HEADER ── -->
 <header>
   <a href="#" class="stc-logo">
-    <div class="stc-logo-box">stc</div>
-    <span class="stc-wordmark">stc</span>
+    <div class="logo-box">stc</div>
+    <span class="logo-word">stc</span>
   </a>
   <nav>
     <a href="#">Mobile</a>
@@ -632,16 +432,14 @@
     <a href="#">Devices</a>
     <a href="#">Support</a>
   </nav>
-  <div class="header-right">
-    <span class="lang-toggle">عربي</span>
-    <button class="my-stc-btn">My stc</button>
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="font-size:13px;color:var(--text-3);cursor:pointer;font-weight:500">عربي</span>
+    <button class="my-stc">My stc</button>
   </div>
 </header>
 
 
-<!-- ══════════════════════════════════════
-     HERO
-══════════════════════════════════════ -->
+<!-- ── HERO ── -->
 <section class="hero">
   <div class="hero-pill">Postpaid Plans 2025</div>
   <h1>Stay Connected,<br>Stay Ahead with 5G</h1>
@@ -649,52 +447,48 @@
 </section>
 
 
-<!-- ══════════════════════════════════════
-     PLANS
-══════════════════════════════════════ -->
+<!-- ── PLANS ── -->
 <section class="plans-section">
-  <div class="section-eyebrow">Postpaid</div>
-  <h2 class="section-heading">Pick your perfect plan</h2>
+  <div class="eyebrow">Postpaid</div>
+  <h2 class="section-title">Pick your perfect plan</h2>
 
   <div class="plans-grid">
 
-    <!-- Plan 1: mofawtar 1 -->
-    <div class="plan-card">
-      <div class="plan-tier">Starter</div>
-      <div class="plan-name">mofawtar 1</div>
-      <div class="plan-desc">Ideal for everyday essentials</div>
-      <div class="plan-price-row">
-        <span class="plan-price">80</span>
-        <span class="plan-currency">SAR</span>
-        <span class="plan-per">/ month</span>
+    <!-- mofawtar 1 — no SAS event -->
+    <div class="card">
+      <div class="card-tier">Starter</div>
+      <div class="card-name">mofawtar 1</div>
+      <div class="card-desc">Ideal for everyday essentials</div>
+      <div class="price-row">
+        <span class="price">80</span>
+        <span class="price-cur">SAR</span>
+        <span class="price-per">/ month</span>
       </div>
-      <hr class="plan-divider" />
-      <ul class="plan-features">
+      <hr class="divider" />
+      <ul class="feats">
         <li><span class="tick">✓</span> 5 GB Local Data</li>
         <li><span class="tick">✓</span> 500 Local Minutes</li>
         <li><span class="tick">✓</span> 100 SMS</li>
         <li><span class="tick">✓</span> stc TV Lite</li>
       </ul>
-      <!-- No SAS event on this button — intentional -->
-      <button class="btn btn-ghost"
-        onclick="openCheckout('mofawtar 1', 80, false)">
+      <button class="btn btn-ghost" onclick="openCheckout('mofawtar 1', 80)">
         Proceed to Checkout
       </button>
     </div>
 
-    <!-- Plan 2: mofawtar 2  ← SAS EVENT FIRES HERE -->
-    <div class="plan-card featured">
-      <span class="featured-badge">Most Popular</span>
-      <div class="plan-tier">Standard</div>
-      <div class="plan-name">mofawtar 2</div>
-      <div class="plan-desc">Best for streaming &amp; social</div>
-      <div class="plan-price-row">
-        <span class="plan-price">138</span>
-        <span class="plan-currency">SAR</span>
-        <span class="plan-per">/ month</span>
+    <!-- mofawtar 2 — SAS event fires on this button -->
+    <div class="card featured">
+      <span class="feat-badge">Most Popular</span>
+      <div class="card-tier">Standard</div>
+      <div class="card-name">mofawtar 2</div>
+      <div class="card-desc">Best for streaming &amp; social</div>
+      <div class="price-row">
+        <span class="price">138</span>
+        <span class="price-cur">SAR</span>
+        <span class="price-per">/ month</span>
       </div>
-      <hr class="plan-divider" />
-      <ul class="plan-features">
+      <hr class="divider" />
+      <ul class="feats">
         <li><span class="tick">✓</span> 25 GB 5G Data</li>
         <li><span class="tick">✓</span> Unlimited Local Calls</li>
         <li><span class="tick">✓</span> 25 GB Social Media Data</li>
@@ -704,45 +498,42 @@
       <!--
       ═══════════════════════════════════════════════
       SAS CI 360 — WEB EVENT TRIGGER
-      ───────────────────────────────────────────────
-      This is the ONLY button that fires the CI 360
-      event. The third argument (true) tells the JS
-      to show the spot so CI 360 can inject into it.
 
-      In CI 360 Event config:
-        Event name  →  Checkout Button Click
-        Type        →  Custom → Click
-        Target: id  →  btn-checkout-mofawtar2
+      Event name : Checkout Button Click
+      Type       : Custom → Click
+      Target: id : btn-checkout-mofawtar2
+                   (no # symbol in CI 360 field)
+
+      Only this button fires the CI 360 event.
+      mofawtar 1 and mofawtar 4 buttons do not.
       ═══════════════════════════════════════════════
       -->
       <button class="btn btn-primary"
         id="btn-checkout-mofawtar2"
-        onclick="openCheckout('mofawtar 2', 138, true)">
+        onclick="openCheckout('mofawtar 2', 138)">
         Proceed to Checkout
       </button>
     </div>
 
-    <!-- Plan 3: mofawtar 4 -->
-    <div class="plan-card">
-      <div class="plan-tier">Premium</div>
-      <div class="plan-name">mofawtar 4</div>
-      <div class="plan-desc">Everything, unlimited</div>
-      <div class="plan-price-row">
-        <span class="plan-price">518</span>
-        <span class="plan-currency">SAR</span>
-        <span class="plan-per">/ month</span>
+    <!-- mofawtar 4 — no SAS event -->
+    <div class="card">
+      <div class="card-tier">Premium</div>
+      <div class="card-name">mofawtar 4</div>
+      <div class="card-desc">Everything, unlimited</div>
+      <div class="price-row">
+        <span class="price">518</span>
+        <span class="price-cur">SAR</span>
+        <span class="price-per">/ month</span>
       </div>
-      <hr class="plan-divider" />
-      <ul class="plan-features">
+      <hr class="divider" />
+      <ul class="feats">
         <li><span class="tick">✓</span> Unlimited 5G Data</li>
         <li><span class="tick">✓</span> Unlimited Local &amp; Roaming</li>
         <li><span class="tick">✓</span> stc TV Premium — Free</li>
         <li><span class="tick">✓</span> Priority Network Access</li>
         <li><span class="tick">✓</span> Device Protection</li>
       </ul>
-      <!-- No SAS event on this button — intentional -->
-      <button class="btn btn-outline"
-        onclick="openCheckout('mofawtar 4', 518, false)">
+      <button class="btn btn-outline" onclick="openCheckout('mofawtar 4', 518)">
         Proceed to Checkout
       </button>
     </div>
@@ -751,46 +542,55 @@
 </section>
 
 
-<!-- ══════════════════════════════════════
+<!-- ══════════════════════════════════════════════════════════
      CHECKOUT OVERLAY
-     The spot lives permanently inside here
-     with its ID intact at all times.
-     Visibility is toggled by CSS class only.
-══════════════════════════════════════ -->
+     ──────────────────────────────────────────────────────────
+     Uses visibility/opacity — NOT display:none.
+     This keeps #checkout-upsell-spot in the rendered DOM
+     from page load, so the SAS tag can register it as a
+     valid delivery target during initialisation.
+══════════════════════════════════════════════════════════ -->
 <div class="overlay" id="overlay-checkout">
-  <div class="checkout-panel">
+  <div class="co-panel">
 
-    <div class="checkout-header">
+    <div class="co-head">
       <h2>Checkout</h2>
-      <button class="close-btn" onclick="closeCheckout()">✕</button>
+      <button class="close-x" onclick="closeCheckout()">✕</button>
     </div>
 
-    <div class="checkout-body">
+    <div class="co-body">
 
       <!--
       ═══════════════════════════════════════════════
       SAS CI 360 — WEB SPOT
 
-      This div NEVER changes its ID.
-      The JS toggles class spot-visible / spot-hidden
-      to control whether the space is shown.
-      CI 360 injects the banner HTML inside this div
-      when the journey fires the Web Task.
+      Always in the DOM. Always rendered.
+      The SAS tag registers this spot at page load.
 
-      Spot config in CI 360:
+      When the Checkout Button Click event fires
+      (mofawtar 2 only), the journey triggers the
+      Web Task, which injects the .upsell-banner HTML
+      into this div.
+
+      For mofawtar 1 and mofawtar 4, no event fires
+      so no content is injected → spot stays empty
+      → :empty CSS rule collapses it to zero height
+      → no blank gap visible in the checkout panel.
+
+      CI 360 Spot config:
         Spot key  →  checkout-upsell-spot
         Selector  →  #checkout-upsell-spot
         Page      →  Any page
       ═══════════════════════════════════════════════
       -->
-      <div id="checkout-upsell-spot" class="spot-hidden"></div>
+      <div id="checkout-upsell-spot"></div>
 
-      <!-- Order summary — filled dynamically by JS -->
+      <!-- Order summary -->
       <div class="order-box">
-        <div class="order-box-label">Order Summary</div>
+        <div class="order-label">Order Summary</div>
         <div class="order-row">
-          <span id="co-plan-name">—</span>
-          <span id="co-plan-price">— SAR</span>
+          <span id="co-name">—</span>
+          <span id="co-price">— SAR</span>
         </div>
         <div class="order-row">
           <span>Activation Fee</span>
@@ -806,9 +606,9 @@
         </div>
       </div>
 
-      <!-- Payment method selector -->
+      <!-- Payment -->
       <div class="pay-label">Payment Method</div>
-      <div class="pay-grid">
+      <div class="pay-grid" id="pay-grid">
         <div class="pay-opt active" onclick="selectPay(this)">
           <span class="pi">💳</span>Card
         </div>
@@ -829,27 +629,20 @@
 </div>
 
 
-<!-- ══════════════════════════════════════
-     SUCCESS OVERLAY
-══════════════════════════════════════ -->
+<!-- ── SUCCESS OVERLAY — also visibility-based ── -->
 <div class="overlay" id="overlay-success">
   <div class="success-panel">
     <div class="success-ring">✓</div>
     <h2>You're all set!</h2>
-    <p>Your <strong id="success-plan-name">plan</strong> is being activated.<br>
+    <p>Your <strong id="success-name">plan</strong> is being activated.<br>
        A confirmation SMS has been sent to your number.</p>
-    <button class="btn btn-primary"
-      style="max-width:180px;margin:0 auto"
-      onclick="resetDemo()">
-      ↺ Start Over
-    </button>
+    <button class="btn btn-primary" style="max-width:180px;margin:0 auto"
+      onclick="resetDemo()">↺ Start Over</button>
   </div>
 </div>
 
 
-<!-- ══════════════════════════════════════
-     FOOTER
-══════════════════════════════════════ -->
+<!-- ── FOOTER ── -->
 <footer>
   <div>
     <div class="footer-brand">stc</div>
@@ -860,110 +653,67 @@
 
 
 <script>
-  /* ─────────────────────────────────────────────────────
-     STATE
-     currentPlan   — which plan is being checked out
-     currentPrice  — price of that plan
-  ───────────────────────────────────────────────────── */
   var currentPlan  = '';
   var currentPrice = 0;
 
-  /* ─────────────────────────────────────────────────────
-     openCheckout(plan, price, showSpot)
-     ────────────────────────────────────────────────────
-     showSpot = true  → mofawtar 2 only
-                        reveals the spot so CI 360 can
-                        inject the upsell banner
+  /* ── open checkout ─────────────────────────────────────
+     Single function for all three plans.
+     No ID swapping. No class toggling on the spot.
 
-     showSpot = false → mofawtar 1 and mofawtar 4
-                        keeps the spot hidden (collapsed)
-                        CI 360's selector finds the div
-                        but there is no visible space for
-                        a banner — no upsell makes sense
+     For mofawtar 1 and mofawtar 4:
+       - No CI 360 event fires (different button IDs)
+       - #checkout-upsell-spot receives no injection
+       - :empty CSS collapses the spot → no blank gap
 
-     The spot ID (#checkout-upsell-spot) NEVER changes.
-     Only the CSS class changes: spot-visible / spot-hidden
-  ───────────────────────────────────────────────────── */
-  function openCheckout(plan, price, showSpot) {
+     For mofawtar 2:
+       - btn-checkout-mofawtar2 fires the CI 360 event
+       - Journey triggers → Web Task injects banner
+       - Spot expands via :not(:empty) CSS rule
+  ─────────────────────────────────────────────────────── */
+  function openCheckout(plan, price) {
     currentPlan  = plan;
     currentPrice = price;
 
-    /* Update order summary text */
-    document.getElementById('co-plan-name').textContent  = plan;
-    document.getElementById('co-plan-price').textContent = price + ' SAR / mo';
-    document.getElementById('co-total').textContent      = price + ' SAR';
+    document.getElementById('co-name').textContent  = plan;
+    document.getElementById('co-price').textContent = price + ' SAR / mo';
+    document.getElementById('co-total').textContent = price + ' SAR';
 
-    /* Reset payment selection to Card */
+    /* Reset payment to Card */
     document.querySelectorAll('.pay-opt').forEach(function(el) {
       el.classList.remove('active');
     });
     document.querySelector('.pay-opt').classList.add('active');
 
-    /* Control spot visibility based on which plan was selected */
-    var spot = document.getElementById('checkout-upsell-spot');
-    if (showSpot) {
-      spot.classList.remove('spot-hidden');
-      spot.classList.add('spot-visible');
-    } else {
-      spot.classList.remove('spot-visible');
-      spot.classList.add('spot-hidden');
-    }
-
-    /* Open the overlay */
+    /* Show overlay via visibility — panel stays in DOM */
     document.getElementById('overlay-checkout').classList.add('open');
   }
 
-  /* ─────────────────────────────────────────────────────
-     closeCheckout
-     ────────────────────────────────────────────────────
-     Hides the overlay AND resets the spot back to hidden.
-     This is critical — without this reset, the spot stays
-     visible on the next open and the injected banner from
-     the previous session is still inside the div.
-  ───────────────────────────────────────────────────── */
+  /* ── close checkout ────────────────────────────────────
+     Hides overlay and clears any injected banner so the
+     next checkout session starts with an empty spot.
+     The spot ID and the div itself are never touched —
+     only innerHTML is cleared.
+  ─────────────────────────────────────────────────────── */
   function closeCheckout() {
     document.getElementById('overlay-checkout').classList.remove('open');
-    resetSpot();
+    /* Clear injected content so :empty kicks in and collapses spot */
+    document.getElementById('checkout-upsell-spot').innerHTML = '';
   }
 
-  /* ─────────────────────────────────────────────────────
-     resetSpot
-     Collapses the spot and clears any injected content
-     so each new checkout session starts clean.
-  ───────────────────────────────────────────────────── */
-  function resetSpot() {
-    var spot = document.getElementById('checkout-upsell-spot');
-    spot.classList.remove('spot-visible');
-    spot.classList.add('spot-hidden');
-    spot.innerHTML = ''; /* clear any injected banner HTML */
-  }
-
-  /* ─────────────────────────────────────────────────────
-     selectPay — payment method toggle
-  ───────────────────────────────────────────────────── */
   function selectPay(el) {
-    document.querySelectorAll('.pay-opt').forEach(function(b) {
-      b.classList.remove('active');
-    });
+    document.querySelectorAll('.pay-opt').forEach(function(b) { b.classList.remove('active'); });
     el.classList.add('active');
   }
 
-  /* ─────────────────────────────────────────────────────
-     confirmOrder
-  ───────────────────────────────────────────────────── */
   function confirmOrder() {
-    document.getElementById('success-plan-name').textContent = currentPlan;
+    document.getElementById('success-name').textContent = currentPlan;
     document.getElementById('overlay-checkout').classList.remove('open');
+    document.getElementById('checkout-upsell-spot').innerHTML = '';
     document.getElementById('overlay-success').classList.add('open');
-    resetSpot();
   }
 
-  /* ─────────────────────────────────────────────────────
-     resetDemo — for repeated live demos
-  ───────────────────────────────────────────────────── */
   function resetDemo() {
     document.getElementById('overlay-success').classList.remove('open');
-    resetSpot();
   }
 </script>
 
