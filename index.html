@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>stc — Postpaid Plans</title>
 
-  <!-- ═══════════════════════════════════════════════
-       SAS CI 360 TAG  |  Corevision Training Tenant
-       tenantId: 2a7ea85c0b000164f7542674
-  ════════════════════════════════════════════════ -->
   <link rel="preload" href="https://ingest-training.ci360.sas.com/js/ot2.min.js" as="script" />
   <script>
     (function(ci, a) {
@@ -21,8 +17,6 @@
   <script async data-efname="ci360"
     src="https://ingest-training.ci360.sas.com/js/ot2.min.js"
     id="ob-script-async"></script>
-  <!-- ════════════════════════════════════════════ -->
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 
@@ -224,7 +218,7 @@
        #checkout-upsell-spot sits in its own block
        above the order/payment grid.
 
-       :empty       → zero height, no gap
+       :empty        → zero height, no gap
        :not(:empty) → content visible, 24px gap below
 
        CI 360 spot config:
@@ -399,7 +393,6 @@
 </head>
 <body>
 
-<!-- ── HEADER ── -->
 <header>
   <a class="logo" href="#">
     <div class="logo-box">stc</div>
@@ -419,7 +412,6 @@
 </header>
 
 
-<!-- ── PLANS ── -->
 <section class="plans-section">
   <div class="wrap">
     <div class="eyebrow">Postpaid 2025</div>
@@ -427,7 +419,6 @@
 
     <div class="plans-grid">
 
-      <!-- mofawtar 1 — no CI 360 event -->
       <div class="plan" id="card-m1">
         <div class="plan-tier">Starter</div>
         <div class="plan-name">mofawtar 1</div>
@@ -450,7 +441,6 @@
         </button>
       </div>
 
-      <!-- mofawtar 2 — CI 360 event fires on this button -->
       <div class="plan" id="card-m2">
         <span class="plan-badge">Most Popular</span>
         <div class="plan-tier">Standard</div>
@@ -469,17 +459,6 @@
           <li><span class="tick">✓</span>stc TV Lite</li>
           <li><span class="tick">✓</span>Free SIM Delivery</li>
         </ul>
-        <!--
-        ══════════════════════════════════════════════
-        SAS CI 360 — WEB EVENT TRIGGER
-
-        Event name : Checkout Button Click
-        Type       : Custom → Click
-        Target: id : btn-checkout-mofawtar2
-
-        Only this button fires the CI 360 event.
-        ══════════════════════════════════════════════
-        -->
         <button class="btn btn-purple"
           id="btn-checkout-mofawtar2"
           onclick="selectPlan('mofawtar 2', 138, 'card-m2')">
@@ -487,7 +466,6 @@
         </button>
       </div>
 
-      <!-- mofawtar 4 — no CI 360 event -->
       <div class="plan" id="card-m4">
         <div class="plan-tier">Premium</div>
         <div class="plan-name">mofawtar 4</div>
@@ -518,56 +496,18 @@
 <div class="wrap"><hr class="page-rule" /></div>
 
 
-<!-- ════════════════════════════════════════════════════
-     CHECKOUT
-     ────────────────────────────────────────────────────
-     Structure (reading order):
-
-       [#checkout-upsell-spot]    ← ROW 1, full width
-                                    Banner lands here.
-                                    Nothing overlaps it.
-
-       [order summary] [payment]  ← ROW 2, two columns
-                                    Below the banner.
-                                    Can never hide it.
-
-     The spot and the checkout grid are SIBLINGS — the
-     grid is never a parent of the spot. This means the
-     order card cannot visually compete with the banner
-     regardless of timing.
-════════════════════════════════════════════════════ -->
 <section id="checkout">
   <div class="wrap">
 
-    <!--
-    ══════════════════════════════════════════════════════
-    SAS CI 360 — WEB SPOT
-
-    Spot key  →  checkout-upsell-spot
-    Selector  →  #checkout-upsell-spot
-    Page      →  Any page
-
-    Position: full-width block, above the order grid.
-    Always in the DOM. Never inside a hidden container.
-    Registered by SAS tag on page load every time.
-
-    :empty       → zero height, invisible, no gap
-    :not(:empty) → banner visible, 24px gap below
-    ══════════════════════════════════════════════════════
-    -->
     <div id="checkout-upsell-spot"></div>
 
-    <!-- Two-column grid — always below the spot -->
     <div class="checkout-grid">
 
-      <!-- LEFT: order summary -->
       <div>
-        <!-- Empty hint — shown before any plan is selected -->
         <div class="empty-hint" id="empty-hint">
           <span>↑</span> Select a plan above to see your order
         </div>
 
-        <!-- Order card — shown after plan selected -->
         <div class="order-card" id="order-card" style="display:none">
           <div class="order-card-head">Order Summary</div>
           <div class="order-card-body">
@@ -590,7 +530,6 @@
           </div>
         </div>
 
-        <!-- Success strip -->
         <div class="success-strip" id="success-strip" style="display:none">
           <div class="success-icon-sm">✓</div>
           <div>
@@ -600,7 +539,6 @@
         </div>
       </div>
 
-      <!-- RIGHT: payment + confirm -->
       <div>
         <div class="pay-card">
           <div class="pay-card-head">Payment Method</div>
@@ -634,12 +572,10 @@
         </div>
       </div>
 
-    </div><!-- /checkout-grid -->
-  </div>
+    </div></div>
 </section>
 
 
-<!-- ── FOOTER ── -->
 <footer>
   <div>
     <div class="footer-brand">stc</div>
@@ -657,25 +593,17 @@
      ─────────────────────────────────────────────────────
      Called by all three checkout buttons.
 
-     The spot (#checkout-upsell-spot) is cleared at the
-     start of every call. This ensures that if the user
-     switches from mofawtar 2 to another plan, any
-     previously injected banner is removed.
-
      For mofawtar 2: btn-checkout-mofawtar2 fires the
-     CI 360 custom click event. The journey triggers.
-     The Web Task injects the banner into the spot.
-     The spot is ABOVE the order grid, so the banner
-     appears first — it cannot be hidden by anything.
-
-     For mofawtar 1 and 4: no event fires, spot stays
-     empty, :empty CSS collapses it to zero height.
+     CI 360 custom click event. The Web Task injects the banner
+     into the spot upon page re-evaluation.
   ───────────────────────────────────────────────────── */
   function selectPlan(plan, price, cardId) {
     currentPlan = plan;
 
-    /* 1. Clear any previous banner */
-    document.getElementById('checkout-upsell-spot').innerHTML = '';
+    /* 1. Clear any previous banner safely using setTimeout to avoid race conditions */
+    setTimeout(function() {
+      document.getElementById('checkout-upsell-spot').innerHTML = '';
+    }, 0);
 
     /* 2. Highlight selected card */
     ['card-m1','card-m2','card-m4'].forEach(function(id) {
@@ -702,6 +630,11 @@
       behavior: 'smooth',
       block: 'start'
     });
+
+    /* 6. Force SAS CI 360 to re-evaluate the page for the new state */
+    if (window.ci360) {
+      ci360('send', 'view');
+    }
   }
 
   function selectPay(el) {
@@ -716,7 +649,11 @@
       currentPlan + ' is being activated. A confirmation SMS has been sent to your number.';
     document.getElementById('success-strip').style.display = 'flex';
     document.getElementById('confirm-btn').style.display   = 'none';
-    document.getElementById('checkout-upsell-spot').innerHTML = '';
+    
+    // Safely clear the upsell banner on order confirmation
+    setTimeout(function() {
+      document.getElementById('checkout-upsell-spot').innerHTML = '';
+    }, 0);
 
     ['card-m1','card-m2','card-m4'].forEach(function(id) {
       document.getElementById(id).classList.remove('selected');
