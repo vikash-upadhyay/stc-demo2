@@ -8,11 +8,6 @@
   <!-- ═══════════════════════════════════════════════
        SAS CI 360 TAG  |  Corevision Training Tenant
        tenantId: 2a7ea85c0b000164f7542674
-
-       Because the checkout section is always part of
-       the page (not hidden inside an overlay), the
-       SAS tag registers #checkout-upsell-spot reliably
-       on every page load with no timing issues.
   ════════════════════════════════════════════════ -->
   <link rel="preload" href="https://ingest-training.ci360.sas.com/js/ot2.min.js" as="script" />
   <script>
@@ -55,7 +50,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── HEADER ──────────────────────────────────── */
+    /* ── HEADER ── */
     header {
       height: 60px;
       background: #fff;
@@ -69,381 +64,336 @@
       z-index: 10;
     }
     .logo {
-      display: flex;
-      align-items: center;
-      gap: 9px;
+      display: flex; align-items: center; gap: 9px;
       text-decoration: none;
     }
     .logo-box {
       width: 36px; height: 36px;
-      background: var(--purple);
-      border-radius: 8px;
+      background: var(--purple); border-radius: 8px;
       display: flex; align-items: center; justify-content: center;
       color: #fff;
       font-family: 'Outfit', sans-serif;
       font-size: 13px; font-weight: 800;
     }
-    .logo-text {
+    .logo-word {
       font-family: 'Outfit', sans-serif;
       font-size: 20px; font-weight: 800;
-      color: var(--purple);
-      letter-spacing: -.03em;
+      color: var(--purple); letter-spacing: -.03em;
     }
     nav {
-      display: flex;
-      gap: 28px;
-      font-size: 13.5px;
-      font-weight: 500;
+      display: flex; gap: 28px;
+      font-size: 13.5px; font-weight: 500;
       color: var(--text-3);
     }
     nav a { text-decoration: none; color: inherit; transition: color .15s; }
     nav a:hover { color: var(--purple); }
     .header-btn {
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: var(--purple);
-      color: #fff;
-      border: none;
-      padding: 7px 18px;
-      border-radius: 20px;
-      font-size: 13px; font-weight: 600;
-      cursor: pointer;
-      transition: background .2s;
+      background: var(--purple); color: #fff;
+      border: none; padding: 7px 18px;
+      border-radius: 20px; font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: background .2s;
     }
     .header-btn:hover { background: var(--purple-mid); }
 
-    /* ── PLANS SECTION ───────────────────────────── */
-    .plans-wrap {
+    /* ── SHARED WRAPPER ── */
+    .wrap {
       max-width: 1020px;
       margin: 0 auto;
-      padding: 56px 24px 48px;
+      padding-left: 24px;
+      padding-right: 24px;
     }
-    .section-tag {
+
+    /* ── PLANS ── */
+    .plans-section { padding: 52px 0 44px; }
+    .eyebrow {
       font-size: 11px; font-weight: 700;
       letter-spacing: .1em; text-transform: uppercase;
       color: var(--purple); margin-bottom: 8px;
     }
-    .section-heading {
+    .section-h {
       font-family: 'Outfit', sans-serif;
       font-size: 26px; font-weight: 700;
-      letter-spacing: -.01em;
-      margin-bottom: 32px;
+      letter-spacing: -.01em; margin-bottom: 28px;
     }
 
     .plans-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-    }
-    @media (max-width: 720px) {
-      .plans-grid { grid-template-columns: 1fr; }
-      nav { display: none; }
-      header { padding: 0 20px; }
-      .plans-wrap, .checkout-wrap { padding-left: 20px; padding-right: 20px; }
+      gap: 18px;
     }
 
     .plan {
       border: 1.5px solid var(--line);
       border-radius: 16px;
-      padding: 26px 22px 22px;
+      padding: 24px 20px 20px;
       position: relative;
       background: #fff;
       transition: box-shadow .2s, border-color .2s, transform .2s;
-      cursor: default;
     }
     .plan:hover {
-      box-shadow: 0 8px 32px rgba(0,0,0,.08);
+      box-shadow: 0 8px 28px rgba(0,0,0,.07);
       transform: translateY(-2px);
     }
     .plan.selected {
       border-color: var(--purple);
-      box-shadow: 0 0 0 1px var(--purple), 0 8px 32px rgba(79,0,140,.1);
+      box-shadow: 0 0 0 1px var(--purple);
     }
-    .plan-hot-badge {
-      position: absolute;
-      top: -1px; left: 50%;
+    .plan-badge {
+      position: absolute; top: -1px; left: 50%;
       transform: translateX(-50%);
       background: var(--purple); color: #fff;
       font-size: 9.5px; font-weight: 700;
       letter-spacing: .08em; text-transform: uppercase;
-      padding: 3px 12px;
-      border-radius: 0 0 8px 8px;
+      padding: 3px 12px; border-radius: 0 0 8px 8px;
       white-space: nowrap;
     }
     .plan-tier {
-      font-size: 10.5px; font-weight: 700;
+      font-size: 10px; font-weight: 700;
       letter-spacing: .09em; text-transform: uppercase;
       color: var(--text-3); margin-bottom: 4px;
     }
     .plan-name {
       font-family: 'Outfit', sans-serif;
-      font-size: 20px; font-weight: 700;
-      margin-bottom: 3px;
+      font-size: 20px; font-weight: 700; margin-bottom: 3px;
     }
     .plan.selected .plan-name { color: var(--purple); }
-    .plan-desc { font-size: 12px; color: var(--text-3); margin-bottom: 18px; }
-    .plan-price-row {
-      display: flex; align-items: baseline; gap: 3px;
-      margin-bottom: 18px;
-    }
-    .plan-price {
+    .plan-desc { font-size: 12px; color: var(--text-3); margin-bottom: 16px; }
+    .price-row { display: flex; align-items: baseline; gap: 3px; margin-bottom: 16px; }
+    .price {
       font-family: 'Outfit', sans-serif;
-      font-size: 38px; font-weight: 800;
-      letter-spacing: -.03em;
+      font-size: 38px; font-weight: 800; letter-spacing: -.03em;
     }
-    .plan-cur { font-size: 13px; font-weight: 600; color: var(--text-2); align-self: flex-end; margin-bottom: 4px; }
-    .plan-mo  { font-size: 12px; color: var(--text-3); align-self: flex-end; margin-bottom: 4px; }
-
-    hr.rule { border: none; border-top: 1px solid var(--line); margin: 0 0 16px; }
-
-    .plan-features { list-style: none; margin-bottom: 22px; }
-    .plan-features li {
+    .price-sar { font-size: 13px; font-weight: 600; color: var(--text-2); align-self: flex-end; margin-bottom: 4px; }
+    .price-mo  { font-size: 11.5px; color: var(--text-3); align-self: flex-end; margin-bottom: 4px; }
+    hr.rule { border: none; border-top: 1px solid var(--line); margin: 0 0 14px; }
+    .feats { list-style: none; margin-bottom: 20px; }
+    .feats li {
       font-size: 12.5px; color: var(--text-2);
-      padding: 4px 0;
-      display: flex; align-items: center; gap: 8px;
+      padding: 4px 0; display: flex; align-items: center; gap: 8px;
     }
     .tick {
       width: 16px; height: 16px;
       background: var(--green-soft); border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
-      color: var(--green); font-size: 8.5px; font-weight: 900;
-      flex-shrink: 0;
+      color: var(--green); font-size: 8.5px; font-weight: 900; flex-shrink: 0;
     }
 
-    /* ── BUTTONS ─────────────────────────────────── */
+    /* ── BUTTONS ── */
     .btn {
       display: block; width: 100%;
-      padding: 11px 18px; border-radius: 24px; border: none;
+      padding: 11px 16px; border-radius: 22px; border: none;
       font-size: 13.5px; font-weight: 600; cursor: pointer;
       font-family: 'Plus Jakarta Sans', sans-serif;
       transition: all .18s; text-align: center;
     }
-    .btn-purple {
-      background: var(--purple); color: #fff;
-      box-shadow: 0 3px 12px rgba(79,0,140,.22);
-    }
-    .btn-purple:hover {
-      background: var(--purple-mid);
-      box-shadow: 0 5px 18px rgba(79,0,140,.3);
-      transform: translateY(-1px);
-    }
-    .btn-outline {
-      background: transparent; color: var(--purple);
-      border: 1.5px solid var(--purple);
-    }
+    .btn-purple { background: var(--purple); color: #fff; box-shadow: 0 3px 12px rgba(79,0,140,.2); }
+    .btn-purple:hover { background: var(--purple-mid); transform: translateY(-1px); }
+    .btn-outline { background: transparent; color: var(--purple); border: 1.5px solid var(--purple); }
     .btn-outline:hover { background: var(--purple-soft); }
-    .btn-ghost {
-      background: var(--bg-2); color: var(--text-2);
-      border: 1.5px solid var(--line);
-    }
+    .btn-ghost  { background: var(--bg-2); color: var(--text-2); border: 1.5px solid var(--line); }
     .btn-ghost:hover { border-color: #c0c0d0; color: var(--text); }
-    .btn-green {
-      background: var(--green); color: #fff;
-      box-shadow: 0 3px 12px rgba(0,166,81,.2);
-    }
+    .btn-green  { background: var(--green); color: #fff; box-shadow: 0 3px 12px rgba(0,166,81,.18); }
     .btn-green:hover { background: #009048; transform: translateY(-1px); }
 
-    /* ── DIVIDER LINE ────────────────────────────── */
-    .page-divider {
-      max-width: 1020px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-    .page-divider hr {
-      border: none;
-      border-top: 1px solid var(--line);
-    }
+    /* ── DIVIDER ── */
+    .page-rule { border: none; border-top: 1px solid var(--line); }
 
-    /* ── CHECKOUT SECTION ────────────────────────────
-       Always rendered in the DOM — no display:none.
-       This guarantees the SAS tag registers
-       #checkout-upsell-spot on page load every time.
-    ─────────────────────────────────────────────── */
-    .checkout-wrap {
-      max-width: 1020px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-      display: grid;
-      grid-template-columns: 1fr 380px;
-      gap: 32px;
-      align-items: start;
-    }
-    @media (max-width: 720px) {
-      .checkout-wrap { grid-template-columns: 1fr; }
+    /* ════════════════════════════════════════════════
+       CHECKOUT SECTION
+       ────────────────────────────────────────────────
+       Layout (top to bottom):
+
+       1. #checkout-upsell-spot   ← full width, first
+          Banner injected here by CI 360.
+          Nothing above it. Nothing overlapping it.
+
+       2. Two-column grid
+          Left:  order summary
+          Right: payment + confirm
+
+       The spot is intentionally OUTSIDE and ABOVE
+       the two-column grid so the order summary card
+       can never obscure or compete with it.
+    ════════════════════════════════════════════════ -->
+    #checkout {
+      padding: 40px 0 72px;
     }
 
-    /* Left side — order summary + spot */
-    .checkout-left h2 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 20px; font-weight: 700;
-      margin-bottom: 20px;
-    }
+    /* ── SPOT ROW — full width, isolated ────────────
+       #checkout-upsell-spot sits in its own block
+       above the order/payment grid.
 
-    /* ── SAS CI 360 WEB SPOT ─────────────────────────
-       Selector  →  #checkout-upsell-spot
-       Spot key  →  checkout-upsell-spot
+       :empty       → zero height, no gap
+       :not(:empty) → content visible, 24px gap below
 
-       Always in the page DOM. Never inside a hidden
-       container. CI 360 injects the .upsell-banner
-       HTML here when the journey fires the Web Task.
-
-       :empty  → zero height, no gap (mofawtar 1 & 4)
-       :not(:empty) → 18px margin below (mofawtar 2)
+       CI 360 spot config:
+         Spot key  →  checkout-upsell-spot
+         Selector  →  #checkout-upsell-spot
+         Page      →  Any page
     ─────────────────────────────────────────────── */
     #checkout-upsell-spot {
+      /* Full width inside .wrap, above everything */
+      margin-bottom: 0;
       transition: margin-bottom .3s ease;
     }
     #checkout-upsell-spot:not(:empty) {
-      margin-bottom: 20px;
+      margin-bottom: 24px;
     }
 
-    /* ── INJECTED BANNER (creative HTML from CI 360) ─
-       Copy the .upsell-banner block into your CI 360
+    /* ── Injected banner styles ───────────────────────
+       CI 360 injects this HTML into #checkout-upsell-spot.
+       Paste the .banner block into your CI 360
        HTML Creative editor.
     ─────────────────────────────────────────────── */
-    .upsell-banner {
+    .banner {
       background: var(--purple-soft);
       border: 1.5px solid var(--purple);
       border-radius: 12px;
-      padding: 14px 16px;
+      padding: 16px 18px;
       display: flex; align-items: center; gap: 14px;
-      animation: slideIn .35s cubic-bezier(.22,1,.36,1);
+      animation: fadeDown .4s cubic-bezier(.22,1,.36,1);
     }
-    @keyframes slideIn {
-      from { opacity:0; transform: translateY(-6px); }
+    @keyframes fadeDown {
+      from { opacity:0; transform: translateY(-8px); }
       to   { opacity:1; transform: translateY(0); }
     }
-    .ub-icon {
-      width: 40px; height: 40px; flex-shrink: 0;
+    .b-icon {
+      width: 42px; height: 42px; flex-shrink: 0;
       background: var(--purple); border-radius: 10px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 18px;
+      font-size: 20px;
     }
-    .ub-body { flex: 1; min-width: 0; }
-    .ub-body strong {
-      display: block; font-size: 13px; font-weight: 700;
+    .b-text { flex: 1; }
+    .b-text strong {
+      display: block; font-size: 13.5px; font-weight: 700;
       color: var(--purple); margin-bottom: 3px;
     }
-    .ub-body span { font-size: 12px; color: var(--text-2); line-height: 1.45; }
-    .ub-action {
+    .b-text span { font-size: 12px; color: var(--text-2); line-height: 1.5; }
+    .b-btn {
       background: var(--purple); color: #fff;
-      border: none; padding: 8px 14px; border-radius: 18px;
-      font-size: 12px; font-weight: 700; cursor: pointer;
+      border: none; padding: 9px 16px; border-radius: 20px;
+      font-size: 12.5px; font-weight: 700;
+      cursor: pointer; white-space: nowrap; flex-shrink: 0;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      white-space: nowrap; flex-shrink: 0;
       transition: background .15s;
     }
-    .ub-action:hover { background: var(--purple-mid); }
+    .b-btn:hover { background: var(--purple-mid); }
 
-    /* ── ORDER CARD ─────────────────────────────────── */
+    /* ── TWO-COLUMN GRID — order + payment ── */
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+      align-items: start;
+    }
+    @media (max-width: 720px) {
+      .plans-grid  { grid-template-columns: 1fr; }
+      .checkout-grid { grid-template-columns: 1fr; }
+      nav { display: none; }
+      header { padding: 0 20px; }
+      .wrap { padding-left: 18px; padding-right: 18px; }
+    }
+
+    /* ── ORDER CARD ── */
     .order-card {
-      background: var(--bg-2);
       border: 1px solid var(--line);
       border-radius: 14px;
-      padding: 20px;
+      overflow: hidden;
     }
-    .order-card-title {
-      font-size: 10.5px; font-weight: 700;
+    .order-card-head {
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 18px;
+      font-size: 11px; font-weight: 700;
       letter-spacing: .09em; text-transform: uppercase;
-      color: var(--text-3); margin-bottom: 14px;
+      color: var(--text-3);
     }
+    .order-card-body { padding: 4px 18px 18px; }
     .order-row {
       display: flex; justify-content: space-between;
-      font-size: 13px; padding: 6px 0;
-      color: var(--text-2);
-      border-bottom: 1px solid var(--line);
+      font-size: 13px; padding: 10px 0;
+      color: var(--text-2); border-bottom: 1px solid var(--line);
     }
     .order-row:last-of-type { border-bottom: none; }
     .order-row span:last-child { color: var(--text); font-weight: 600; }
     .order-total {
       display: flex; justify-content: space-between;
       font-size: 15px; font-weight: 700;
-      margin-top: 14px; padding-top: 14px;
+      padding: 14px 0 0; margin-top: 4px;
       border-top: 1.5px solid var(--line);
     }
 
-    /* ── EMPTY STATE ─────────────────────────────────── */
-    .empty-state {
+    /* Empty state */
+    .empty-hint {
+      padding: 28px 0;
+      font-size: 13px; color: var(--text-3);
+      display: flex; align-items: center; gap: 8px;
+    }
+
+    /* ── PAYMENT CARD ── */
+    .pay-card {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .pay-card-head {
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 18px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .09em; text-transform: uppercase;
       color: var(--text-3);
-      font-size: 13.5px;
-      padding: 32px 0;
-      display: flex; align-items: center; gap: 10px;
     }
-    .empty-state .arrow { font-size: 18px; }
-
-    /* Right side — payment */
-    .checkout-right h3 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 16px; font-weight: 700;
-      margin-bottom: 16px;
-    }
-
-    .pay-options {
-      display: flex; flex-direction: column; gap: 10px;
-      margin-bottom: 20px;
-    }
+    .pay-card-body { padding: 12px 14px 14px; }
     .pay-opt {
       display: flex; align-items: center; gap: 12px;
-      padding: 12px 14px;
+      padding: 11px 12px; border-radius: 10px;
       border: 1.5px solid var(--line);
-      border-radius: 10px;
-      cursor: pointer;
+      cursor: pointer; margin-bottom: 8px;
       transition: all .15s;
     }
-    .pay-opt.active {
-      border-color: var(--purple);
-      background: var(--purple-soft);
-    }
+    .pay-opt:last-of-type { margin-bottom: 12px; }
+    .pay-opt.active { border-color: var(--purple); background: var(--purple-soft); }
     .pay-opt:not(.active):hover { border-color: #c0c0d0; }
-    .pay-icon { font-size: 20px; }
-    .pay-name { font-size: 13px; font-weight: 500; }
+    .pay-icon { font-size: 18px; }
+    .pay-name { font-size: 13px; font-weight: 500; flex: 1; }
     .pay-opt.active .pay-name { color: var(--purple); font-weight: 600; }
-    .pay-dot {
-      margin-left: auto;
-      width: 16px; height: 16px;
-      border-radius: 50%;
-      border: 1.5px solid var(--line);
+    .pay-radio {
+      width: 16px; height: 16px; border-radius: 50%;
+      border: 1.5px solid var(--line); flex-shrink: 0;
       transition: all .15s;
     }
-    .pay-opt.active .pay-dot {
-      background: var(--purple);
-      border-color: var(--purple);
-    }
+    .pay-opt.active .pay-radio { background: var(--purple); border-color: var(--purple); }
 
-    /* ── SUCCESS STATE ──────────────────────────────── */
-    .success-box {
+    /* ── SUCCESS STRIP ── */
+    .success-strip {
+      display: flex; align-items: center; gap: 12px;
       background: var(--green-soft);
       border: 1.5px solid var(--green);
-      border-radius: 12px;
-      padding: 20px;
-      display: none;
-      align-items: center;
-      gap: 14px;
-      margin-bottom: 20px;
-      animation: slideIn .35s cubic-bezier(.22,1,.36,1);
+      border-radius: 10px; padding: 13px 16px;
+      margin-top: 10px;
+      animation: fadeDown .35s cubic-bezier(.22,1,.36,1);
     }
-    .success-box.visible { display: flex; }
-    .success-icon {
-      width: 40px; height: 40px;
-      background: var(--green); border-radius: 50%;
+    .success-icon-sm {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--green);
       display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 18px; flex-shrink: 0;
+      color: #fff; font-size: 14px; flex-shrink: 0;
     }
-    .success-text strong { display: block; font-size: 14px; font-weight: 700; color: var(--green); margin-bottom: 2px; }
-    .success-text span { font-size: 12px; color: var(--text-2); }
+    .success-strip strong { display: block; font-size: 13px; font-weight: 700; color: var(--green); }
+    .success-strip span   { font-size: 12px; color: var(--text-2); }
 
-    /* ── FOOTER ─────────────────────────────────────── */
+    /* ── FOOTER ── */
     footer {
-      background: var(--bg-2);
-      border-top: 1px solid var(--line);
+      background: var(--bg-2); border-top: 1px solid var(--line);
       padding: 20px 48px;
       display: flex; align-items: center; justify-content: space-between;
-      font-size: 12px; color: var(--text-3);
-      flex-wrap: wrap; gap: 8px;
+      font-size: 12px; color: var(--text-3); flex-wrap: wrap; gap: 8px;
     }
-    .footer-logo {
+    .footer-brand {
       font-family: 'Outfit', sans-serif;
-      font-size: 14px; font-weight: 700;
-      color: var(--purple); margin-bottom: 2px;
+      font-size: 14px; font-weight: 700; color: var(--purple); margin-bottom: 2px;
     }
   </style>
 </head>
@@ -453,7 +403,7 @@
 <header>
   <a class="logo" href="#">
     <div class="logo-box">stc</div>
-    <span class="logo-text">stc</span>
+    <span class="logo-word">stc</span>
   </a>
   <nav>
     <a href="#">Mobile</a>
@@ -470,218 +420,229 @@
 
 
 <!-- ── PLANS ── -->
-<section class="plans-wrap" id="plans">
-  <div class="section-tag">Postpaid 2025</div>
-  <h2 class="section-heading">Choose your plan</h2>
+<section class="plans-section">
+  <div class="wrap">
+    <div class="eyebrow">Postpaid 2025</div>
+    <h2 class="section-h">Choose your plan</h2>
 
-  <div class="plans-grid">
+    <div class="plans-grid">
 
-    <!-- mofawtar 1 — no CI 360 event -->
-    <div class="plan" id="card-m1">
-      <div class="plan-tier">Starter</div>
-      <div class="plan-name">mofawtar 1</div>
-      <div class="plan-desc">Everyday calls and browsing</div>
-      <div class="plan-price-row">
-        <span class="plan-price">80</span>
-        <span class="plan-cur">SAR</span>
-        <span class="plan-mo">/ mo</span>
+      <!-- mofawtar 1 — no CI 360 event -->
+      <div class="plan" id="card-m1">
+        <div class="plan-tier">Starter</div>
+        <div class="plan-name">mofawtar 1</div>
+        <div class="plan-desc">Everyday calls and browsing</div>
+        <div class="price-row">
+          <span class="price">80</span>
+          <span class="price-sar">SAR</span>
+          <span class="price-mo">/ mo</span>
+        </div>
+        <hr class="rule" />
+        <ul class="feats">
+          <li><span class="tick">✓</span>5 GB Local Data</li>
+          <li><span class="tick">✓</span>500 Local Minutes</li>
+          <li><span class="tick">✓</span>100 SMS</li>
+          <li><span class="tick">✓</span>stc TV Lite</li>
+        </ul>
+        <button class="btn btn-ghost"
+          onclick="selectPlan('mofawtar 1', 80, 'card-m1')">
+          Proceed to Checkout
+        </button>
       </div>
-      <hr class="rule" />
-      <ul class="plan-features">
-        <li><span class="tick">✓</span>5 GB Local Data</li>
-        <li><span class="tick">✓</span>500 Local Minutes</li>
-        <li><span class="tick">✓</span>100 SMS</li>
-        <li><span class="tick">✓</span>stc TV Lite</li>
-      </ul>
-      <button class="btn btn-ghost"
-        onclick="selectPlan('mofawtar 1', 80, 'card-m1')">
-        Proceed to Checkout
-      </button>
-    </div>
 
-    <!-- mofawtar 2 — CI 360 event fires on THIS button -->
-    <div class="plan" id="card-m2">
-      <span class="plan-hot-badge">Most Popular</span>
-      <div class="plan-tier">Standard</div>
-      <div class="plan-name">mofawtar 2</div>
-      <div class="plan-desc">Streaming, social, and more</div>
-      <div class="plan-price-row">
-        <span class="plan-price">138</span>
-        <span class="plan-cur">SAR</span>
-        <span class="plan-mo">/ mo</span>
+      <!-- mofawtar 2 — CI 360 event fires on this button -->
+      <div class="plan" id="card-m2">
+        <span class="plan-badge">Most Popular</span>
+        <div class="plan-tier">Standard</div>
+        <div class="plan-name">mofawtar 2</div>
+        <div class="plan-desc">Streaming, social, and more</div>
+        <div class="price-row">
+          <span class="price">138</span>
+          <span class="price-sar">SAR</span>
+          <span class="price-mo">/ mo</span>
+        </div>
+        <hr class="rule" />
+        <ul class="feats">
+          <li><span class="tick">✓</span>25 GB 5G Data</li>
+          <li><span class="tick">✓</span>Unlimited Local Calls</li>
+          <li><span class="tick">✓</span>25 GB Social Data</li>
+          <li><span class="tick">✓</span>stc TV Lite</li>
+          <li><span class="tick">✓</span>Free SIM Delivery</li>
+        </ul>
+        <!--
+        ══════════════════════════════════════════════
+        SAS CI 360 — WEB EVENT TRIGGER
+
+        Event name : Checkout Button Click
+        Type       : Custom → Click
+        Target: id : btn-checkout-mofawtar2
+
+        Only this button fires the CI 360 event.
+        ══════════════════════════════════════════════
+        -->
+        <button class="btn btn-purple"
+          id="btn-checkout-mofawtar2"
+          onclick="selectPlan('mofawtar 2', 138, 'card-m2')">
+          Proceed to Checkout
+        </button>
       </div>
-      <hr class="rule" />
-      <ul class="plan-features">
-        <li><span class="tick">✓</span>25 GB 5G Data</li>
-        <li><span class="tick">✓</span>Unlimited Local Calls</li>
-        <li><span class="tick">✓</span>25 GB Social Data</li>
-        <li><span class="tick">✓</span>stc TV Lite</li>
-        <li><span class="tick">✓</span>Free SIM Delivery</li>
-      </ul>
-      <!--
-      ══════════════════════════════════════════════
-      SAS CI 360 — WEB EVENT TRIGGER
 
-      Event name : Checkout Button Click
-      Type       : Custom → Click
-      Target: id : btn-checkout-mofawtar2
-
-      Only this button fires the CI 360 event.
-      ══════════════════════════════════════════════
-      -->
-      <button class="btn btn-purple"
-        id="btn-checkout-mofawtar2"
-        onclick="selectPlan('mofawtar 2', 138, 'card-m2')">
-        Proceed to Checkout
-      </button>
-    </div>
-
-    <!-- mofawtar 4 — no CI 360 event -->
-    <div class="plan" id="card-m4">
-      <div class="plan-tier">Premium</div>
-      <div class="plan-name">mofawtar 4</div>
-      <div class="plan-desc">Unlimited everything</div>
-      <div class="plan-price-row">
-        <span class="plan-price">518</span>
-        <span class="plan-cur">SAR</span>
-        <span class="plan-mo">/ mo</span>
+      <!-- mofawtar 4 — no CI 360 event -->
+      <div class="plan" id="card-m4">
+        <div class="plan-tier">Premium</div>
+        <div class="plan-name">mofawtar 4</div>
+        <div class="plan-desc">Unlimited everything</div>
+        <div class="price-row">
+          <span class="price">518</span>
+          <span class="price-sar">SAR</span>
+          <span class="price-mo">/ mo</span>
+        </div>
+        <hr class="rule" />
+        <ul class="feats">
+          <li><span class="tick">✓</span>Unlimited 5G Data</li>
+          <li><span class="tick">✓</span>Unlimited Local &amp; Roaming</li>
+          <li><span class="tick">✓</span>stc TV Premium — Free</li>
+          <li><span class="tick">✓</span>Priority Network Access</li>
+          <li><span class="tick">✓</span>Device Protection</li>
+        </ul>
+        <button class="btn btn-outline"
+          onclick="selectPlan('mofawtar 4', 518, 'card-m4')">
+          Proceed to Checkout
+        </button>
       </div>
-      <hr class="rule" />
-      <ul class="plan-features">
-        <li><span class="tick">✓</span>Unlimited 5G Data</li>
-        <li><span class="tick">✓</span>Unlimited Local &amp; Roaming</li>
-        <li><span class="tick">✓</span>stc TV Premium — Free</li>
-        <li><span class="tick">✓</span>Priority Network Access</li>
-        <li><span class="tick">✓</span>Device Protection</li>
-      </ul>
-      <button class="btn btn-outline"
-        onclick="selectPlan('mofawtar 4', 518, 'card-m4')">
-        Proceed to Checkout
-      </button>
-    </div>
 
+    </div>
   </div>
 </section>
 
-
-<!-- ── DIVIDER ── -->
-<div class="page-divider"><hr /></div>
+<div class="wrap"><hr class="page-rule" /></div>
 
 
 <!-- ════════════════════════════════════════════════════
-     CHECKOUT SECTION
+     CHECKOUT
      ────────────────────────────────────────────────────
-     This section is ALWAYS part of the page — no
-     display:none, no overlay, no popup.
+     Structure (reading order):
 
-     The SAS tag sees #checkout-upsell-spot in the DOM
-     the moment the page loads and registers it as a
-     valid spot target. This is why the banner injection
-     works reliably every time, regardless of which
-     plan the user clicked first.
+       [#checkout-upsell-spot]    ← ROW 1, full width
+                                    Banner lands here.
+                                    Nothing overlaps it.
+
+       [order summary] [payment]  ← ROW 2, two columns
+                                    Below the banner.
+                                    Can never hide it.
+
+     The spot and the checkout grid are SIBLINGS — the
+     grid is never a parent of the spot. This means the
+     order card cannot visually compete with the banner
+     regardless of timing.
 ════════════════════════════════════════════════════ -->
-<section class="checkout-wrap" id="checkout">
-
-  <!-- LEFT — spot + order summary -->
-  <div class="checkout-left">
-    <h2>Order Summary</h2>
+<section id="checkout">
+  <div class="wrap">
 
     <!--
-    ══════════════════════════════════════════════════
+    ══════════════════════════════════════════════════════
     SAS CI 360 — WEB SPOT
 
     Spot key  →  checkout-upsell-spot
     Selector  →  #checkout-upsell-spot
     Page      →  Any page
 
-    Always in the DOM. CI 360 injects the creative
-    HTML here after the Checkout Button Click event
-    triggers the journey and Web Task.
+    Position: full-width block, above the order grid.
+    Always in the DOM. Never inside a hidden container.
+    Registered by SAS tag on page load every time.
 
-    For mofawtar 1 and mofawtar 4: no event fires,
-    nothing is injected, the div stays empty, and
-    the :empty CSS rule means zero height — no gap.
-    ══════════════════════════════════════════════════
+    :empty       → zero height, invisible, no gap
+    :not(:empty) → banner visible, 24px gap below
+    ══════════════════════════════════════════════════════
     -->
     <div id="checkout-upsell-spot"></div>
 
-    <!-- Empty state (before any plan selected) -->
-    <div class="empty-state" id="empty-state">
-      <span class="arrow">↑</span>
-      Select a plan above to see your order details
-    </div>
+    <!-- Two-column grid — always below the spot -->
+    <div class="checkout-grid">
 
-    <!-- Order card (shown after plan selected) -->
-    <div class="order-card" id="order-card" style="display:none">
-      <div class="order-card-title">Your Order</div>
-      <div class="order-row">
-        <span id="ord-plan">—</span>
-        <span id="ord-price">—</span>
-      </div>
-      <div class="order-row">
-        <span>Activation Fee</span>
-        <span style="color:var(--green)">FREE</span>
-      </div>
-      <div class="order-row">
-        <span>SIM Delivery</span>
-        <span style="color:var(--green)">FREE</span>
-      </div>
-      <div class="order-total">
-        <span>Total Today</span>
-        <span id="ord-total">—</span>
-      </div>
-    </div>
+      <!-- LEFT: order summary -->
+      <div>
+        <!-- Empty hint — shown before any plan is selected -->
+        <div class="empty-hint" id="empty-hint">
+          <span>↑</span> Select a plan above to see your order
+        </div>
 
-    <!-- Success confirmation -->
-    <div class="success-box" id="success-box">
-      <div class="success-icon">✓</div>
-      <div class="success-text">
-        <strong>Order Confirmed</strong>
-        <span id="success-msg">Your plan is being activated. An SMS has been sent to your number.</span>
-      </div>
-    </div>
+        <!-- Order card — shown after plan selected -->
+        <div class="order-card" id="order-card" style="display:none">
+          <div class="order-card-head">Order Summary</div>
+          <div class="order-card-body">
+            <div class="order-row">
+              <span id="ord-plan">—</span>
+              <span id="ord-price">—</span>
+            </div>
+            <div class="order-row">
+              <span>Activation Fee</span>
+              <span style="color:var(--green)">FREE</span>
+            </div>
+            <div class="order-row">
+              <span>SIM Delivery</span>
+              <span style="color:var(--green)">FREE</span>
+            </div>
+            <div class="order-total">
+              <span>Total Today</span>
+              <span id="ord-total">—</span>
+            </div>
+          </div>
+        </div>
 
+        <!-- Success strip -->
+        <div class="success-strip" id="success-strip" style="display:none">
+          <div class="success-icon-sm">✓</div>
+          <div>
+            <strong>Order Confirmed</strong>
+            <span id="success-msg">Your plan is being activated.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: payment + confirm -->
+      <div>
+        <div class="pay-card">
+          <div class="pay-card-head">Payment Method</div>
+          <div class="pay-card-body">
+            <div class="pay-opt active" onclick="selectPay(this)">
+              <span class="pay-icon">💳</span>
+              <span class="pay-name">Credit / Debit Card</span>
+              <span class="pay-radio"></span>
+            </div>
+            <div class="pay-opt" onclick="selectPay(this)">
+              <span class="pay-icon">📱</span>
+              <span class="pay-name">stc pay</span>
+              <span class="pay-radio"></span>
+            </div>
+            <div class="pay-opt" onclick="selectPay(this)">
+              <span class="pay-icon">🏦</span>
+              <span class="pay-name">Bill to Account</span>
+              <span class="pay-radio"></span>
+            </div>
+
+            <button class="btn btn-green" id="confirm-btn"
+              style="display:none" onclick="confirmOrder()">
+              Confirm &amp; Pay
+            </button>
+
+            <p id="pay-hint"
+              style="font-size:12px;color:var(--text-3);padding:4px 2px;line-height:1.5">
+              Select a plan above to continue.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /checkout-grid -->
   </div>
-
-  <!-- RIGHT — payment -->
-  <div class="checkout-right">
-    <h3>Payment Method</h3>
-
-    <div class="pay-options">
-      <div class="pay-opt active" onclick="selectPay(this)">
-        <span class="pay-icon">💳</span>
-        <span class="pay-name">Credit / Debit Card</span>
-        <span class="pay-dot"></span>
-      </div>
-      <div class="pay-opt" onclick="selectPay(this)">
-        <span class="pay-icon">📱</span>
-        <span class="pay-name">stc pay</span>
-        <span class="pay-dot"></span>
-      </div>
-      <div class="pay-opt" onclick="selectPay(this)">
-        <span class="pay-icon">🏦</span>
-        <span class="pay-name">Bill to Account</span>
-        <span class="pay-dot"></span>
-      </div>
-    </div>
-
-    <button class="btn btn-green" id="confirm-btn"
-      style="display:none" onclick="confirmOrder()">
-      Confirm &amp; Pay
-    </button>
-
-    <p id="pay-hint" style="font-size:12px;color:var(--text-3);margin-top:12px;line-height:1.5">
-      Select a plan above to continue.
-    </p>
-  </div>
-
-</section><!-- /checkout -->
+</section>
 
 
 <!-- ── FOOTER ── -->
 <footer>
   <div>
-    <div class="footer-logo">stc</div>
+    <div class="footer-brand">stc</div>
     <div>© 2025 Saudi Telecom Company. All rights reserved.</div>
   </div>
   <div>Privacy Policy &nbsp;·&nbsp; Terms of Use &nbsp;·&nbsp; Contact</div>
@@ -691,50 +652,58 @@
 <script>
   var currentPlan = '';
 
-  /* ── selectPlan ───────────────────────────────────────
+  /* ─────────────────────────────────────────────────────
+     selectPlan
+     ─────────────────────────────────────────────────────
      Called by all three checkout buttons.
-     Updates the order summary and scrolls to checkout.
 
-     For mofawtar 2: the button ID btn-checkout-mofawtar2
-     causes the SAS tag to fire the CI 360 custom click
-     event → journey starts → Web Task injects banner
-     into #checkout-upsell-spot.
+     The spot (#checkout-upsell-spot) is cleared at the
+     start of every call. This ensures that if the user
+     switches from mofawtar 2 to another plan, any
+     previously injected banner is removed.
 
-     For mofawtar 1 and 4: different button IDs,
-     no CI 360 event, no banner injected.
-  ─────────────────────────────────────────────────────── */
+     For mofawtar 2: btn-checkout-mofawtar2 fires the
+     CI 360 custom click event. The journey triggers.
+     The Web Task injects the banner into the spot.
+     The spot is ABOVE the order grid, so the banner
+     appears first — it cannot be hidden by anything.
+
+     For mofawtar 1 and 4: no event fires, spot stays
+     empty, :empty CSS collapses it to zero height.
+  ───────────────────────────────────────────────────── */
   function selectPlan(plan, price, cardId) {
     currentPlan = plan;
 
-    /* Highlight selected card, clear others */
+    /* 1. Clear any previous banner */
+    document.getElementById('checkout-upsell-spot').innerHTML = '';
+
+    /* 2. Highlight selected card */
     ['card-m1','card-m2','card-m4'].forEach(function(id) {
       document.getElementById(id).classList.remove('selected');
     });
     document.getElementById(cardId).classList.add('selected');
 
-    /* Populate order summary */
+    /* 3. Populate order */
     document.getElementById('ord-plan').textContent  = plan;
     document.getElementById('ord-price').textContent = price + ' SAR / mo';
     document.getElementById('ord-total').textContent = price + ' SAR';
 
-    /* Show order card, hide empty state */
-    document.getElementById('empty-state').style.display  = 'none';
-    document.getElementById('order-card').style.display   = 'block';
-    document.getElementById('confirm-btn').style.display  = 'block';
-    document.getElementById('pay-hint').style.display     = 'none';
+    /* 4. Show order card, hide empty hint and success */
+    document.getElementById('empty-hint').style.display    = 'none';
+    document.getElementById('order-card').style.display    = 'block';
+    document.getElementById('confirm-btn').style.display   = 'block';
+    document.getElementById('pay-hint').style.display      = 'none';
+    document.getElementById('success-strip').style.display = 'none';
 
-    /* Hide success if user switches plan after confirming */
-    document.getElementById('success-box').classList.remove('visible');
-
-    /* Clear any previously injected banner so each
-       mofawtar 2 click gets a fresh injection */
-    document.getElementById('checkout-upsell-spot').innerHTML = '';
-
-    /* Scroll to checkout section */
-    document.getElementById('checkout').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    /* 5. Scroll — targets the spot row so user lands
+          at the very top of checkout, seeing the spot
+          first, then the order summary below          */
+    document.getElementById('checkout').scrollIntoView({
+      behavior: 'smooth',
+      block: 'start'
+    });
   }
 
-  /* ── selectPay ────────────────────────────────────── */
   function selectPay(el) {
     document.querySelectorAll('.pay-opt').forEach(function(o) {
       o.classList.remove('active');
@@ -742,15 +711,13 @@
     el.classList.add('active');
   }
 
-  /* ── confirmOrder ─────────────────────────────────── */
   function confirmOrder() {
     document.getElementById('success-msg').textContent =
       currentPlan + ' is being activated. A confirmation SMS has been sent to your number.';
-    document.getElementById('success-box').classList.add('visible');
-    document.getElementById('confirm-btn').style.display = 'none';
+    document.getElementById('success-strip').style.display = 'flex';
+    document.getElementById('confirm-btn').style.display   = 'none';
     document.getElementById('checkout-upsell-spot').innerHTML = '';
 
-    /* Deselect cards */
     ['card-m1','card-m2','card-m4'].forEach(function(id) {
       document.getElementById(id).classList.remove('selected');
     });
